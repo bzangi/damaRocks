@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index.css">
+    <script src="./index.js"></script>
+    <title>DamaRocks</title>
+    <link rel="shortcut icon" type="image/jpg" href="./conexão-websocket-base/game.png" />
+</head>
+
+<body>
+
+    <div>
+        <header class="qr-logo">
+            <img src="https://cdn.discordapp.com/attachments/524753716142931968/905710676536868864/download.png">
+            <h1>DamaRocks</h1>
+        </header>
+        <section class="login-area" id="login-area">
+            <input id="ign" type="text">
+            <button onclick="startGame();">Iniciar Jogo</button>
+        </section>
+        <section class="game-area" id="game-area">
+            <div class="player" id="p1">Player 1</div>
+
+            <div class="board">
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s2">
+                    <!-- <div class="piece-j1"></div> -->
+                </div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s4"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s6"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s8"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s10"></div>
+                <div class="board-spot-black" id="s11"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s13"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s15"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s17"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s19"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s22"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s24"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s26"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s28"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s30"></div>
+                <div class="board-spot-black" id="s31"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s33"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s35"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s37"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s39"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s42"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s44"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s46"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s48"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s50"></div>
+                <div class="board-spot-black" id="s51"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s53"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s55"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s57"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s59"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s62">
+                    <!-- <div class="piece-j2"></div> -->
+                </div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s64"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s66"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s68"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s70"></div>
+                <div class="board-spot-black" id="s71"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s73"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s75"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s77"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s79"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s82"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s84"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s86"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s88"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s90"></div>
+                <div class="board-spot-black" id="s91"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s93"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s95"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s97"></div>
+                <div class="board-spot-white"></div>
+                <div class="board-spot-black" id="s99"></div>
+                <div class="board-spot-white"></div>
+            </div>
+
+            <div class="player" id="p2">Player 2</div>
+        </section>
+    </div>
+
+    <footer>
+        <ul class="list" id="list">
+            <li><img src="https://img.icons8.com/ios-filled/100/000000/developer.png" />Bruno Zangirolami</li>
+            <li><img
+                    src="https://img.icons8.com/external-kiranshastry-lineal-kiranshastry/64/000000/external-code-coding-kiranshastry-lineal-kiranshastry-1.png" />Desenvolvedor
+                Back-End</li>
+            <li><a href="https://github.com/bzangi" target="_blank"><img
+                        src="https://img.icons8.com/ios-glyphs/30/000000/github.png" />GitHub</a>
+            </li>
+            <li><a href="https://www.linkedin.com/in/bruno-zangirolami/" target="_blank"><img
+                        src="https://img.icons8.com/color/48/000000/linkedin.png" />Linked-In</a></li>
+        </ul>
+    </footer>
+
+</body>
+
+</html>

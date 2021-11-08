@@ -1,0 +1,25 @@
+{
+    "table": {
+        "spots": [
+            {
+                "location": "s2",
+                "state": "pj1"
+            },
+            {
+                "location": "s23",
+                "state": "pj1"
+            },
+            {
+                "location": "s24",
+                "state": "pj2"
+            },
+            {
+                "location": "s25",
+                "state": "pj2"
+            }
+        ]
+    },
+    "Turn": {
+        "player": "p1"
+    }
+}
