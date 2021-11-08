@@ -2,24 +2,209 @@
     "table": {
         "spots": [
             {
-                "location": "s2",
+                "location": "1,2",
                 "state": "pj1"
             },
             {
-                "location": "s23",
+                "location": "1,4",
                 "state": "pj1"
             },
             {
-                "location": "s24",
+                "location": "1,6",
+                "state": "pj1"
+            },
+            {
+                "location": "1,8",
+                "state": "pj1"
+            },
+            {
+                "location": "1,10",
+                "state": "pj1"
+            },
+            {
+                "location": "2,1",
+                "state": "pj1"
+            },
+            {
+                "location": "2,3",
+                "state": "pj1"
+            },
+            {
+                "location": "2,5",
+                "state": "pj1"
+            },
+            {
+                "location": "2,7",
+                "state": "pj1"
+            },
+            {
+                "location": "2,9",
+                "state": "pj1"
+            },
+            {
+                "location": "3,2",
+                "state": "pj1"
+            },
+            {
+                "location": "3,4",
+                "state": "pj1"
+            },
+            {
+                "location": "3,6",
+                "state": "pj1"
+            },
+            {
+                "location": "3,8",
+                "state": "pj1"
+            },
+            {
+                "location": "3,10",
+                "state": "pj1"
+            },
+            {
+                "location": "4,1",
+                "state": "pj1"
+            },
+            {
+                "location": "4,3",
+                "state": "pj1"
+            },
+            {
+                "location": "4,5",
+                "state": "pj1"
+            },
+            {
+                "location": "4,7",
+                "state": "pj1"
+            },
+            {
+                "location": "4,9",
+                "state": "pj1"
+            },
+            {
+                "location": "5,2",
+                "state": "pj0"
+            },
+            {
+                "location": "5,4",
+                "state": "pj0"
+            },
+            {
+                "location": "5,6",
+                "state": "pj0"
+            },
+            {
+                "location": "5,8",
+                "state": "pj0"
+            },
+            {
+                "location": "5,10",
+                "state": "pj0"
+            },
+            {
+                "location": "6,1",
+                "state": "pj0"
+            },
+            {
+                "location": "6,3",
+                "state": "pj0"
+            },
+            {
+                "location": "6,5",
+                "state": "pj0"
+            },
+            {
+                "location": "6,7",
+                "state": "pj0"
+            },
+            {
+                "location": "6,9",
+                "state": "pj0"
+            },
+            {
+                "location": "7,2",
                 "state": "pj2"
             },
             {
-                "location": "s25",
+                "location": "7,4",
+                "state": "pj2"
+            },
+            {
+                "location": "7,6",
+                "state": "pj2"
+            },
+            {
+                "location": "7,8",
+                "state": "pj2"
+            },
+            {
+                "location": "7,10",
+                "state": "pj2"
+            },
+            {
+                "location": "8,1",
+                "state": "pj2"
+            },
+            {
+                "location": "8,3",
+                "state": "pj2"
+            },
+            {
+                "location": "8,5",
+                "state": "pj2"
+            },
+            {
+                "location": "8,7",
+                "state": "pj2"
+            },
+            {
+                "location": "8,9",
+                "state": "pj2"
+            },
+            {
+                "location": "9,2",
+                "state": "pj2"
+            },
+            {
+                "location": "9,4",
+                "state": "pj2"
+            },
+            {
+                "location": "9,6",
+                "state": "pj2"
+            },
+            {
+                "location": "9,8",
+                "state": "pj2"
+            },
+            {
+                "location": "9,10",
+                "state": "pj2"
+            },
+            {
+                "location": "10,1",
+                "state": "pj2"
+            },
+            {
+                "location": "10,3",
+                "state": "pj2"
+            },
+            {
+                "location": "10,5",
+                "state": "pj2"
+            },
+            {
+                "location": "10,7",
+                "state": "pj2"
+            },
+            {
+                "location": "10,9",
                 "state": "pj2"
             }
         ]
     },
-    "Turn": {
+    "turn": {
         "player": "p1"
-    }
+    },
+    "code": "6"
 }

@@ -6,10 +6,10 @@ function startGame() {
     const ign = document.getElementById('ign').value;
 
     //Valida se já existe conexão
-    // if (ws) {
-    //     alert('Já conectado à partida')
-    //     return false;
-    // }
+    if (ws) {
+        alert('Já conectado à partida')
+        return false;
+    }
 
     //Inicia uma conexão com o WS
     ws = new WebSocket('ws://localhost:8080/game');
@@ -24,6 +24,18 @@ function startGame() {
             alert(responseObject.message)
         } else if (responseObject.code == '0') {
             alert(responseObject.message)
+        } else if (responseObject.code == '6') {
+            responseObject.table.spots.forEach(spot => {
+                let piece = document.createElement('div');
+                if (spot.state == 'pj1') {
+                    piece.className = 'piece-j1'
+                } else if (spot.state == 'pj2') {
+                    piece.className = 'piece-j2'
+                } else {
+                    // sem peças (pj0)
+                }
+                document.getElementById(spot.location).append(piece)
+            });
         }
     }
 
