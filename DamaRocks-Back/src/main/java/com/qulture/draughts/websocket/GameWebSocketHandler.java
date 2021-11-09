@@ -2,7 +2,6 @@ package com.qulture.draughts.websocket;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
-import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.AbstractWebSocketHandler;
@@ -21,7 +20,6 @@ public class GameWebSocketHandler extends AbstractWebSocketHandler  {
 	@Override
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
 		System.out.println(message.getPayload().toString());
-		session.sendMessage(new TextMessage("MENSAGEM RECEBIDA PELO SERVIDOR"));
 	}
 
 	

@@ -26,6 +26,9 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 
 	private final BeanCreatingHandlerProvider<WebSocketHandler> provider;
 
+	/*
+	 * variável responsável por armazenar as sessões conectadas ao websocket
+	 * */	
 	private final Map<WebSocketSession, WebSocketHandler> handlers = new ConcurrentHashMap<>();
 	
 	private final boolean supportsPartialMessages;
@@ -39,11 +42,11 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 		this.supportsPartialMessages = supportsPartialMessages;
 	}
 
-	@Override
-	public void setBeanFactory(BeanFactory beanFactory) {
-		this.provider.setBeanFactory(beanFactory);
-	}
-
+	/*
+	 * gerencia as sessões conectadas, definindo os jogadores 1 e 2 por ordem de conexão,
+	 * impede a conexão de mais de 2 sessões no websocket
+	 * serializa o json para comunicação com front-end
+	 * */
 	@Override
 	public void afterConnectionEstablished(WebSocketSession session) throws Exception {
 		System.out.println("GERENCIADOR DE SESSÕES RECEBEU NOVA SESSÃO");
@@ -51,22 +54,33 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 		if (this.handlers.size() == 0) {
 			this.handlers.put(session, handler);
 			
-			
 			session.sendMessage(new TextMessage("{\r\n"
 					+ "  \"code\": \"2\",\r\n"
 					+ "  \"message\": \"Aguardando oponente\"\r\n"
 					+ "}"));
+			session.getAttributes().put("player", "j1");
+			session.sendMessage(new TextMessage("{\r\n"
+					+ "  \"code\": \"4\",\r\n"
+					+ "  \"message\": \"j1\"\r\n"
+					+ "}"));
 			handler.afterConnectionEstablished(session);
+			
 		} else if (this.handlers.size() == 1) {
 			this.handlers.put(session, handler);
+			session.getAttributes().put("player", "j2");
 			ComunicationManager.sendToAll(this.handlers, "{\r\n"
 						+ "  \"code\": \"3\",\r\n"
 						+ "  \"message\": \"Partida iniciando\"\r\n"
 						+ "}");
+			session.sendMessage(new TextMessage("{\r\n"
+					+ "  \"code\": \"4\",\r\n"
+					+ "  \"message\": \"j2\"\r\n"
+					+ "}"));
 			
 			/*
 			 * mapa para serializar 2 objetos em 1 único JSON
 			 * */
+			
 			Map<String, Object> serialMap = new LinkedHashMap<>();
 			GameManager gameManager = new GameManager();
 			serialMap.put("table", gameManager.getInitialTable());
@@ -74,8 +88,6 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 			serialMap.put("code", "6");
 			
 			String serialized = new ObjectMapper().writeValueAsString(serialMap);
-			
-			
 			
 			ComunicationManager.sendToAll(this.handlers, serialized);
 			
@@ -86,30 +98,6 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 					+ "}"));
 		}
 
-	}
-
-	@Override
-	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-		getHandler(session).handleMessage(session, message);
-	}
-
-	@Override
-	public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
-		getHandler(session).handleTransportError(session, exception);
-	}
-
-	@Override
-	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-		try {
-			getHandler(session).afterConnectionClosed(session, closeStatus);
-		} finally {
-			destroyHandler(session);
-		}
-	}
-
-	@Override
-	public boolean supportsPartialMessages() {
-		return this.supportsPartialMessages;
 	}
 
 	private WebSocketHandler getHandler(WebSocketSession session) {
@@ -136,6 +124,44 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 	@Override
 	public String toString() {
 		return "PerConnectionWebSocketHandlerProxy[handlerType=" + this.provider.getHandlerType() + "]";
+	}
+	
+
+	@Override
+	public void setBeanFactory(BeanFactory beanFactory) {
+		this.provider.setBeanFactory(beanFactory);
+	}
+
+
+	@Override
+	public boolean supportsPartialMessages() {
+		return this.supportsPartialMessages;
+	}
+
+	@Override
+	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+		if(!session.getAttributes().containsKey("ign")) {
+			session.getAttributes().put("ign", message.getPayload().toString());
+			if(this.handlers.size() == 2) {
+				ComunicationManager.sendAllNamesToAllSessions(this.handlers);
+			}
+		}
+	
+		getHandler(session).handleMessage(session, message);
+	}
+
+	@Override
+	public void handleTransportError(WebSocketSession session, Throwable exception) throws Exception {
+		getHandler(session).handleTransportError(session, exception);
+	}
+
+	@Override
+	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
+		try {
+			getHandler(session).afterConnectionClosed(session, closeStatus);
+		} finally {
+			destroyHandler(session);
+		}
 	}
 
 }
