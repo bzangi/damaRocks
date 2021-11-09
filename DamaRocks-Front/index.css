@@ -124,3 +124,7 @@ header h1{
     vertical-align: middle;
     margin-right: 5px;
 }
+
+.selected-spot {
+    border: 5px dotted #8d28e0;
+}

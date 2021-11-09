@@ -13,7 +13,7 @@ public class GameManager {
 
 	public GameManager() {
 		this.table = new Table(new ArrayList<Spot>());
-		this.turn = new Turn("p1");
+		this.turn = new Turn("j1");
 	}
 
 	/*
