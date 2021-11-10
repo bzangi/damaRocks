@@ -1,5 +1,6 @@
 //Variável global que armazena a conexão
 var ws;
+var gameStarted = false;
 
 function startGame() {
     //Recupera o nome digitado pelo player
@@ -27,7 +28,13 @@ function startGame() {
         console.log(JSON.parse(data.data))
         //Partida em andamento {code, message}
         if (responseObject.code == '0') {
-            alert(responseObject.message)
+            alert(responseObject.message);
+
+            //Oponente desconectado
+        } else if (responseObject.code == '1') {
+            alert(responseObject.message);
+            this.close;
+            location.reload();
 
             //Aguardando oponente {code, message}
         } else if (responseObject.code == '2') {
@@ -61,12 +68,16 @@ function startGame() {
 
             let pieces = [...document.querySelectorAll('div[class^="piece"]')];
 
+
+            //limpando tabuleiro
             if (pieces.length > 0) {
                 pieces.forEach(piece => {
                     piece.parentElement.removeChild(piece);
                 })
             }
 
+
+            //reposicionando peças de acordo com novo tabuleiro enviado pelo back end
             responseObject.table.spots.forEach(spot => {
                 let piece = document.createElement('div');
                 if (spot.state == 'pj1') {
@@ -82,7 +93,15 @@ function startGame() {
             });
 
             //Separa os elementos clicáveis para cada jogador
-            let spotBlackElements = [...document.getElementsByClassName('board-spot-black')];
+            var spotBlackElements = [...document.getElementsByClassName('board-spot-black')];
+
+            //removendo eventListeners antigos
+            if (gameStarted) {
+                spotBlackElements.forEach(spot => {
+                    spot.removeEventListener('click', this.moveFunction);
+                })
+            }
+
             let emptyBlackSpotsElements = spotBlackElements.filter(element => {
                 return !element.hasChildNodes();
             })
@@ -91,41 +110,51 @@ function startGame() {
 
             let allClickableElements = emptyBlackSpotsElements.concat(playerPieceElements);
 
-            allClickableElements.forEach(element => {
-                element.addEventListener('click', (e) => {
-                    e.bubbles = false;
-                    e.cancelBubble = true;
-                    e.stopPropagation();
 
-                    //Evitando a seleção do tabuleiro
-                    if (e.target.id == 'board') {
-                        return false
-                    }
+            //Movendo a peça e restringindo o jogador que pode movê-la
+            this.moveFunction = function (e) {
+                e.bubbles = false;
+                e.cancelBubble = true;
+                e.stopPropagation();
 
-                    if (responseObject.turn.player == localStorage.getItem('player')) {
-                        //Removendo classe do elemento selecionado
-                        let elements = [...document.getElementsByClassName('selected-spot')]
-                        elements.forEach(element => {
-                            element.classList.remove('selected-spot')
-                        });
+                //Evitando a seleção do tabuleiro
+                if (e.target.id == 'board') {
+                    return false
+                }
 
-                        //Selecionando o elemento clicado
-                        e.target.classList.add('selected-spot')
-                    }
+                console.log(responseObject.turn.player)
+                console.log(localStorage.getItem('player'))
+
+                if (responseObject.turn.player == localStorage.getItem('player')) {
+                    //Removendo classe do elemento selecionado
+                    let elements = [...document.getElementsByClassName('selected-spot')]
+                    elements.forEach(element => {
+                        element.classList.remove('selected-spot')
+                    });
+
+                    //Selecionando o elemento clicado
+                    e.target.classList.add('selected-spot')
 
                     if (e.target.className.includes('piece-' + localStorage.getItem('player'))) {
-                        this.moveStarted = true;
-                        this.clickedPiece = e.target.parentElement.id;
+                        ws.moveStarted = true;
+                        ws.clickedPiece = e.target.parentElement.id;
                     }
 
-                    if (this.moveStarted && e.target.className.includes('board-spot-black')) {
-                        this.moveStarted = false;
-                        this.send('MOVE@' + this.clickedPiece + '/' + 'p' + localStorage.getItem('player') + '@' + e.target.id + '/pj0');
-                        this.clickedPiece = '';
+                    if (ws.moveStarted && e.target.className.includes('board-spot-black')) {
+                        ws.moveStarted = false;
+                        ws.send('MOVE@' + ws.clickedPiece + '/' + 'p' + localStorage.getItem('player') + '@' + e.target.id + '/pj0');
+                        ws.clickedPiece = '';
                         e.target.classList.remove('selected-spot')
                     }
-                })
+                }
+            }
+
+            allClickableElements.forEach(element => {
+                element.addEventListener('click', this.moveFunction)
             });
+
+            gameStarted = true;
+
         }
     }
 

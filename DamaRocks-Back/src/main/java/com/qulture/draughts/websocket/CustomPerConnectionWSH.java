@@ -141,6 +141,22 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 		getHandler(session).handleMessage(session, message);
 	}
 
+	@Override
+	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
+		System.out.println("Player desconectado");
+		try {
+			getHandler(session).afterConnectionClosed(session, closeStatus);
+		} finally {
+			destroyHandler(session);
+			ComunicationManager.sendToAll(handlers, "{\r\n"
+					+ "  \"code\": \"1\",\r\n"
+					+ "  \"message\": \"Oponente desconectado\"\r\n"
+					+ "}");
+		}
+		if (handlers.size()==0) {
+			gameManager.finishedGame();
+		}
+	}
 
 	private WebSocketHandler getHandler(WebSocketSession session) {
 		WebSocketHandler handler = this.handlers.get(session);
@@ -185,13 +201,6 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 		getHandler(session).handleTransportError(session, exception);
 	}
 
-	@Override
-	public void afterConnectionClosed(WebSocketSession session, CloseStatus closeStatus) throws Exception {
-		try {
-			getHandler(session).afterConnectionClosed(session, closeStatus);
-		} finally {
-			destroyHandler(session);
-		}
-	}
+	
 
 }
