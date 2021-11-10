@@ -18,6 +18,9 @@ import org.springframework.web.socket.handler.PerConnectionWebSocketHandler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.qulture.draughts.GameManager;
+import com.qulture.draughts.model.Spot;
+import com.qulture.draughts.model.Table;
+import com.qulture.draughts.model.Turn;
 import com.qulture.draughts.util.ComunicationManager;
 
 public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAware {
@@ -25,6 +28,11 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 	private static final Log logger = LogFactory.getLog(PerConnectionWebSocketHandler.class);
 
 	private final BeanCreatingHandlerProvider<WebSocketHandler> provider;
+	
+	/*
+	 * Gerenciador do jogo, responsável por processar os movimentos do tabuleiro
+	 * */
+	GameManager gameManager = new GameManager();
 
 	/*
 	 * variável responsável por armazenar as sessões conectadas ao websocket
@@ -82,7 +90,6 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 			 * */
 			
 			Map<String, Object> serialMap = new LinkedHashMap<>();
-			GameManager gameManager = new GameManager();
 			serialMap.put("table", gameManager.getInitialTable());
 			serialMap.put("turn", gameManager.getTurn());
 			serialMap.put("code", "6");
@@ -99,6 +106,41 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 		}
 
 	}
+	
+	@Override
+	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
+		if(!session.getAttributes().containsKey("ign")) {
+			session.getAttributes().put("ign", message.getPayload().toString());
+			if(this.handlers.size() == 2) {
+				ComunicationManager.sendAllNamesToAllSessions(this.handlers);
+			}
+		}
+		
+		String[] splittedMessage = message.getPayload().toString().split("@");
+		
+		if(splittedMessage[0].equals("MOVE")) {
+			String[] splittedOldSpot = splittedMessage[1].split("/");
+			String[] splittedNewSpot = splittedMessage[2].split("/");
+			Table newTable = gameManager.getNewTable(new Spot(splittedOldSpot[0], splittedOldSpot[1]), 
+										new Spot(splittedNewSpot[0], splittedNewSpot[1]));
+			Turn nextTurn = gameManager.getTurn();
+			
+			Map<String, Object> serialMap = new LinkedHashMap<>();
+			serialMap.put("table", newTable);
+			serialMap.put("turn", nextTurn);
+			serialMap.put("code", "6");
+			
+			String serialized = new ObjectMapper().writeValueAsString(serialMap);
+			
+			ComunicationManager.sendToAll(this.handlers, serialized);
+		}
+		
+		
+		//MOVE@4,7/pj1@5,8pj0
+	
+		getHandler(session).handleMessage(session, message);
+	}
+
 
 	private WebSocketHandler getHandler(WebSocketSession session) {
 		WebSocketHandler handler = this.handlers.get(session);
@@ -136,18 +178,6 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 	@Override
 	public boolean supportsPartialMessages() {
 		return this.supportsPartialMessages;
-	}
-
-	@Override
-	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
-		if(!session.getAttributes().containsKey("ign")) {
-			session.getAttributes().put("ign", message.getPayload().toString());
-			if(this.handlers.size() == 2) {
-				ComunicationManager.sendAllNamesToAllSessions(this.handlers);
-			}
-		}
-	
-		getHandler(session).handleMessage(session, message);
 	}
 
 	@Override

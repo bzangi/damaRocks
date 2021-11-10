@@ -37,4 +37,11 @@ public class ComunicationManager {
 		String serialized = new ObjectMapper().writeValueAsString(playersMap);
 		sendToAll(map, serialized);
 	}
+	
+//	public static void sendTableToAllSessions(Map<WebSocketSession, WebSocketHandler> map) {
+//		Map<String, String> movesMap = new LinkedHashMap<>();
+//		map.entrySet().stream().forEach(move -> {
+//			movesMap.put(move.getKey().getAttributes().get("move").toString(), );
+//		});
+//	}
 }

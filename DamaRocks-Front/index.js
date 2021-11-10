@@ -19,6 +19,9 @@ function startGame() {
     //Inicia uma conexão com o WS
     ws = new WebSocket('ws://localhost:8080/game');
 
+    ws.moveStarted = false;
+    ws.clickedPiece = '';
+
     ws.onmessage = function (data) {
         let responseObject = JSON.parse(data.data)
         console.log(JSON.parse(data.data))
@@ -55,6 +58,15 @@ function startGame() {
 
             //Recebe a tabela e o turno serializados {table, turn, code}
         } else if (responseObject.code == '6') {
+
+            let pieces = [...document.querySelectorAll('div[class^="piece"]')];
+
+            if (pieces.length > 0) {
+                pieces.forEach(piece => {
+                    piece.parentElement.removeChild(piece);
+                })
+            }
+
             responseObject.table.spots.forEach(spot => {
                 let piece = document.createElement('div');
                 if (spot.state == 'pj1') {
@@ -99,6 +111,18 @@ function startGame() {
 
                         //Selecionando o elemento clicado
                         e.target.classList.add('selected-spot')
+                    }
+
+                    if (e.target.className.includes('piece-' + localStorage.getItem('player'))) {
+                        this.moveStarted = true;
+                        this.clickedPiece = e.target.parentElement.id;
+                    }
+
+                    if (this.moveStarted && e.target.className.includes('board-spot-black')) {
+                        this.moveStarted = false;
+                        this.send('MOVE@' + this.clickedPiece + '/' + 'p' + localStorage.getItem('player') + '@' + e.target.id + '/pj0');
+                        this.clickedPiece = '';
+                        e.target.classList.remove('selected-spot')
                     }
                 })
             });

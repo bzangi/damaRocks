@@ -2,6 +2,8 @@ package com.qulture.draughts;
 
 import java.util.ArrayList;
 
+import javax.naming.directory.InvalidAttributesException;
+
 import com.qulture.draughts.model.Spot;
 import com.qulture.draughts.model.Table;
 import com.qulture.draughts.model.Turn;
@@ -38,12 +40,60 @@ public class GameManager {
 				}
 			}
 			
-		}
+		}		
 		return table;
 	}
-
+	
 	public Turn getTurn() {
 		return turn;
+	}
+	
+	public Table getNewTable(Spot oldSpot, Spot newSpot) throws InvalidAttributesException  {
+		String[] oldSplitted = oldSpot.getLocation().split(",");
+		String[] newSplitted = newSpot.getLocation().split(",");
+		System.out.println(oldSpot.getState());
+		if (oldSpot.getState().equals("pj1")){
+			if(Integer.parseInt(newSplitted[0]) > Integer.parseInt(oldSplitted[0])) {
+				System.out.println("MOVIMENTO VALIDO J1");				
+				
+				/*
+				 * Iteração para encontrar o antigo spot na ArrayList e alterar seu estado
+				 * */
+				int length=table.getSpots().size();
+				for(int i=0; i<length; i++) {
+				    Spot spot = table.getSpots().get(i);
+					if (spot.getLocation().equals(oldSpot.getLocation())) {
+				    	spot.setState("pj0");
+				    }
+					if (spot.getLocation().equals(newSpot.getLocation())) {
+						spot.setState("pj1");
+					}
+				}
+				this.turn.setPlayer("j2");
+			} else {
+				System.out.println("MOVIMENTO INVÁLIDO J1");
+				
+			}
+		} else {
+			if(Integer.parseInt(newSplitted[0]) < Integer.parseInt(oldSplitted[0])) {
+				System.out.println("MOVIMENTO VALIDO J2");
+				
+				int length=table.getSpots().size();
+				for(int i=0; i<length; i++) {
+				    Spot spot = table.getSpots().get(i);
+					if (spot.getLocation().equals(oldSpot.getLocation())) {
+				    	spot.setState("pj0");
+				    }
+					if (spot.getLocation().equals(newSpot.getLocation())) {
+						spot.setState("pj2");
+					}
+				}
+				this.turn.setPlayer("j1");
+			} else {
+				System.out.println("MOVIMENTO INVÁLIDO J2");
+			}
+		}
+		return table;
 	}
 
 }
