@@ -78,7 +78,10 @@ header h1{
 }
 .piece-qpj1{
     background-color: #b050ff;
-    background-image: url("https://cdn.discordapp.com/attachments/524753716142931968/905710676536868864/download.png");
+    background-image: url("./logoQR.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
     border-radius: 50%;
     height: 60px; 
     width: 60px;       
@@ -102,7 +105,10 @@ header h1{
 }
 .piece-qpj2{
     background-color: #f1e1ff;
-    background-image: url("https://cdn.discordapp.com/attachments/524753716142931968/905710676536868864/download.png");
+    background-image: url("./logoQRpride.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
     border-radius: 50%;
     height: 60px;
     width: 60px;        

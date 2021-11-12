@@ -67,6 +67,8 @@ function startGame() {
             //Recebe a tabela e o turno serializados {table, turn, code}
         } else if (responseObject.code == '6') {
 
+            console.log(responseObject)
+
             let pieces = [...document.querySelectorAll('div[class^="piece"]')];
 
 

@@ -26,9 +26,9 @@ public class GameManager {
 	public Table getInitialTable() {
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {
-				if (i <= 4) { 
+				if (i <= 2) { 
 					if ((i % 2 != 0 && j % 2 == 0) || (i % 2 == 0 && j % 2 != 0)) {
-						table.getSpots().add(new Spot(i + "," + j, "pj1")); 
+						table.getSpots().add(new Spot(i + "," + j, "qpj1")); 
 					}
 				} else if (i >= 7) {
 					if (i % 2 == 0 && j % 2 != 0 || i % 2 != 0 && j % 2 == 0)
@@ -74,11 +74,14 @@ public class GameManager {
 						Spot nextSpotFinder = this.spotsIterator(table.getSpots(), nextLocation);
 						if (spotFinder.getState().equals("pj0") && location.equals(newSpot.getLocation())) {
 							// ANDAR
-							this.simpleMove(table, oldSpot, newSpot, "qpj1", "j2");
+							this.queenMove(table, oldSpot, newSpot, "qpj1", "j2");
 						} else if (spotFinder.getState().equals("pj2") || spotFinder.getState().equals("qpj2")) {
 							// COMER
 							if(nextSpotFinder.getState().equals("pj0")) {
-								this.killingMove(spotFinder, oldSpot, nextSpotFinder, "qpj1", "j1");
+								this.jumpMove(spotFinder, oldSpot, nextSpotFinder, "qpj1");
+							    break;
+							}else{
+								break;
 							}
 						}
 					}
@@ -92,11 +95,14 @@ public class GameManager {
 						Spot nextSpotFinder = this.spotsIterator(table.getSpots(), nextLocation);
 						if (spotFinder.getState().equals("pj0") && location.equals(newSpot.getLocation())) {
 							// ANDAR
-							this.simpleMove(table, oldSpot, newSpot, "qpj1", "j2");
+							this.queenMove(table, oldSpot, newSpot, "qpj1", "j2");
 						} else if (spotFinder.getState().equals("pj2") || spotFinder.getState().equals("qpj2")) {
 							// COMER
 							if(nextSpotFinder.getState().equals("pj0")) {
-								this.killingMove(spotFinder, oldSpot, nextSpotFinder, "qpj1", "j1");
+								this.jumpMove(spotFinder, oldSpot, nextSpotFinder, "qpj1");
+								break;
+							}else{
+								break;
 							}
 						}
 					}
@@ -109,11 +115,14 @@ public class GameManager {
 						Spot nextSpotFinder = this.spotsIterator(table.getSpots(), nextLocation);
 						if (spotFinder.getState().equals("pj0") && location.equals(newSpot.getLocation())) {
 							// ANDAR
-							this.simpleMove(table, oldSpot, newSpot, "qpj1", "j2");
+							this.queenMove(table, oldSpot, newSpot, "qpj1", "j2");
 						} else if (spotFinder.getState().equals("pj2") || spotFinder.getState().equals("qpj2")) {
 							// COMER
 							if(nextSpotFinder.getState().equals("pj0")) {
-								this.killingMove(spotFinder, oldSpot, nextSpotFinder, "qpj1", "j1");
+								this.jumpMove(spotFinder, oldSpot, nextSpotFinder, "qpj1");
+								break;
+							}else{
+								break;
 							}
 						}
 					}
@@ -125,11 +134,14 @@ public class GameManager {
 						Spot nextSpotFinder = this.spotsIterator(table.getSpots(), nextLocation);
 						if (spotFinder.getState().equals("pj0") && location.equals(newSpot.getLocation())) {
 							// ANDAR
-							this.simpleMove(table, oldSpot, newSpot, "qpj1", "j2");
+							this.queenMove(table, oldSpot, newSpot, "qpj1", "j2");
 						} else if (spotFinder.getState().equals("pj2") || spotFinder.getState().equals("qpj2")) {
 							// COMER
 							if(nextSpotFinder.getState().equals("pj0")) {
-								this.killingMove(spotFinder, oldSpot, nextSpotFinder, "qpj1", "j1");
+								this.jumpMove(spotFinder, oldSpot, nextSpotFinder, "qpj1");
+								break;
+							}else{
+								break;
 							}
 						}
 					}
@@ -160,7 +172,7 @@ public class GameManager {
 					String enemyLocation = enemyLine + "," + enemyColumn;
 					Spot enemySpot = new Spot(enemyLocation, "pj2");
 
-					this.killingMove(enemySpot, oldSpot, newSpot, "pj1", "j1");
+					this.jumpMove(enemySpot, oldSpot, newSpot, "pj1");
 
 				} else {
 					System.out.println("MOVIMENTO INVÁLIDO J1 - COLUNAS");
@@ -193,7 +205,7 @@ public class GameManager {
 						String enemyLocation = enemyLine + "," + enemyColumn;
 						Spot enemySpot = new Spot(enemyLocation, "pj1");
 
-						this.killingMove(enemySpot, oldSpot, newSpot, "pj2", "j2");
+						this.jumpMove(enemySpot, oldSpot, newSpot, "pj2");
 
 					} else {
 						System.out.println("MOVIMENTO INVÁLIDO J2 - COLUNAS");
@@ -209,19 +221,46 @@ public class GameManager {
 
 	/*
 	 * Remove a peça da casa antiga e posiciona na nova, passando o turno para o
-	 * oponente
+	 * oponente. Caso a peça alcance o outro lado do tabuleiro, ela irá se tornar Dama
 	 */
 	private void simpleMove(Table table, Spot oldSpot, Spot newSpot, String state, String turn) {
 		int length = table.getSpots().size();
+		
 		/*
 		 * Iteração para encontrar o antigo spot na ArrayList e alterar seu estado
 		 */
+		
+		
 		for (int i = 0; i < length; i++) {
 			Spot spot = table.getSpots().get(i);
 			if (spot.getLocation().equals(oldSpot.getLocation())) {
 				spot.setState("pj0");
 			}
-			if (spot.getLocation().equals(newSpot.getLocation())) { //SE NOVO SPOT FOR LINHA 10 OU 1 SETAR DAMA
+			if (spot.getLocation().equals(newSpot.getLocation()) && newSpot.getLocation().split(",")[0].equals("10")){ 
+				spot.setState("qpj1");
+				
+			} else if(spot.getLocation().equals(newSpot.getLocation()) && newSpot.getLocation().split(",")[0].equals("1")) {
+				spot.setState("qpj2");
+				
+			}else if(spot.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("1") || 
+					spot.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("10")) {
+				spot.setState(state);
+			}
+		}
+		this.turn.setPlayer(turn);
+	}
+	
+	private void queenMove(Table table, Spot oldSpot, Spot newSpot, String state, String turn) {
+		int length = table.getSpots().size();
+		
+		for (int i = 0; i < length; i++) {
+			Spot spot = table.getSpots().get(i);
+			if (spot.getLocation().equals(oldSpot.getLocation())) {
+				spot.setState("pj0");
+			}
+				
+			if(spot.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("1") || 
+					spot.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("10")) {
 				spot.setState(state);
 			}
 		}
@@ -232,7 +271,7 @@ public class GameManager {
 	 * Remove a peça da casa antiga e posiciona na nova, removendo a peça inimiga e
 	 * mantendo o turno
 	 */
-	private void killingMove(Spot enemySpot, Spot oldSpot, Spot newSpot, String state, String turn) {
+	private void jumpMove(Spot enemySpot, Spot oldSpot, Spot newSpot, String state) {
 		int length = table.getSpots().size();
 
 		if (enemySpot.getState().equals("pj2")) {
@@ -249,7 +288,10 @@ public class GameManager {
 							if (spot2.getLocation().equals(oldSpot.getLocation())) {
 								spot2.setState("pj0");
 							}
-							if (spot2.getLocation().equals(newSpot.getLocation())) {
+							if (spot2.getLocation().equals(newSpot.getLocation()) && newSpot.getLocation().split(",")[0].equals("10")){ //SE NOVO SPOT FOR LINHA 10 OU 1 SETAR DAMA
+								spot2.setState("qpj1");
+								
+							}else if(spot2.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("10")) {
 								spot2.setState(state);
 							}
 
@@ -258,7 +300,7 @@ public class GameManager {
 					} else {
 						System.out.println("MOVIMENTO INVÁLIDO J1 - 2 casas sem oponente");
 					}
-					this.turn.setPlayer(turn);
+					this.turn.setPlayer("j1");
 				}
 			}
 
@@ -275,7 +317,10 @@ public class GameManager {
 							if (spot2.getLocation().equals(oldSpot.getLocation())) {
 								spot2.setState("pj0");
 							}
-							if (spot2.getLocation().equals(newSpot.getLocation())) {
+							if (spot2.getLocation().equals(newSpot.getLocation()) && newSpot.getLocation().split(",")[0].equals("1")){ //SE NOVO SPOT FOR LINHA 10 OU 1 SETAR DAMA
+								spot2.setState("qpj2");
+								
+							}else if(spot2.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("1")) {
 								spot2.setState(state);
 							}
 
@@ -284,7 +329,7 @@ public class GameManager {
 					} else {
 						System.out.println("MOVIMENTO INVÁLIDO J2 - 2 casas sem oponente");
 					}
-					this.turn.setPlayer(turn);
+					this.turn.setPlayer("j2");
 				}
 			}
 		}
