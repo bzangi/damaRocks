@@ -22,6 +22,7 @@ function startGame() {
 
     ws.moveStarted = false;
     ws.clickedPiece = '';
+    ws.clickedPieceState = '';
 
     ws.onmessage = function (data) {
         let responseObject = JSON.parse(data.data)
@@ -83,8 +84,14 @@ function startGame() {
                 if (spot.state == 'pj1') {
                     piece.className = 'piece-j1';
                     document.getElementById(spot.location).append(piece);
+                } else if (spot.state == 'qpj1') {
+                    piece.className = 'piece-qpj1';
+                    document.getElementById(spot.location).append(piece);
                 } else if (spot.state == 'pj2') {
                     piece.className = 'piece-j2';
+                    document.getElementById(spot.location).append(piece);
+                } else if (spot.state == 'qpj2') {
+                    piece.className = 'piece-qpj2';
                     document.getElementById(spot.location).append(piece);
                 } else {
                     // sem peças (pj0)
@@ -107,8 +114,9 @@ function startGame() {
             })
 
             let playerPieceElements = [...document.getElementsByClassName('piece-' + localStorage.getItem('player'))];
+            let playerQueenElements = [...document.getElementsByClassName('piece-qp' + localStorage.getItem('player'))];
 
-            let allClickableElements = emptyBlackSpotsElements.concat(playerPieceElements);
+            let allClickableElements = emptyBlackSpotsElements.concat(playerPieceElements, playerQueenElements);
 
 
             //Movendo a peça e restringindo o jogador que pode movê-la
@@ -125,7 +133,7 @@ function startGame() {
                 console.log(responseObject.turn.player)
                 console.log(localStorage.getItem('player'))
 
-                if (responseObject.turn.player == localStorage.getItem('player')) {
+                if (responseObject.turn.player == localStorage.getItem('player')) { //AQUI PODE
                     //Removendo classe do elemento selecionado
                     let elements = [...document.getElementsByClassName('selected-spot')]
                     elements.forEach(element => {
@@ -135,15 +143,24 @@ function startGame() {
                     //Selecionando o elemento clicado
                     e.target.classList.add('selected-spot')
 
-                    if (e.target.className.includes('piece-' + localStorage.getItem('player'))) {
+                    console.log(localStorage.getItem('player'))
+                    console.log(e.target.className)
+
+
+                    if (e.target.className.includes('piece-' + localStorage.getItem('player')) || e.target.className.includes('piece-qp' + localStorage.getItem('player'))) {
                         ws.moveStarted = true;
-                        ws.clickedPiece = e.target.parentElement.id; //QUE ISSO????
+                        ws.clickedPiece = e.target.parentElement.id; //id do spot NAO ESTA PEGANDO O PIECE SIMPLES
+                        ws.clickedPieceState = e.target.className.includes('qpj1') ? ws.clickedPieceState = 'qpj1' :
+                            e.target.className.includes('qpj2') ? ws.clickedPieceState = 'qpj2' :
+                                e.target.className.includes('j1') ? ws.clickedPieceState = 'pj1' :
+                                    e.target.className.includes('j2') ? ws.clickedPieceState = 'pj2' : ws.clickedPiece = '';
                     }
 
                     if (ws.moveStarted && e.target.className.includes('board-spot-black')) {
                         ws.moveStarted = false;
-                        ws.send('MOVE@' + ws.clickedPiece + '/' + 'p' + localStorage.getItem('player') + '@' + e.target.id + '/pj0');
+                        ws.send('MOVE@' + ws.clickedPiece + '/' + ws.clickedPieceState + '@' + e.target.id + '/pj0');
                         ws.clickedPiece = '';
+                        ws.clickedPieceState = '';
                         e.target.classList.remove('selected-spot')
                     }
                 }

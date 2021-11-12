@@ -117,7 +117,7 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 		}
 		
 		String[] splittedMessage = message.getPayload().toString().split("@");
-		
+		System.out.println(message.getPayload().toString());
 		if(splittedMessage[0].equals("MOVE")) {
 			String[] splittedOldSpot = splittedMessage[1].split("/");
 			String[] splittedNewSpot = splittedMessage[2].split("/");
