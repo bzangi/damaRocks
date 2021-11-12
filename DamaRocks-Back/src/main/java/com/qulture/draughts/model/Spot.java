@@ -15,7 +15,7 @@ public class Spot {
 		this.location = location;
 		this.state = state;
 	}	
-	
+
 	public String getLocation() {
 		return location;
 	}
