@@ -137,7 +137,7 @@ function startGame() {
 
                     if (e.target.className.includes('piece-' + localStorage.getItem('player'))) {
                         ws.moveStarted = true;
-                        ws.clickedPiece = e.target.parentElement.id;
+                        ws.clickedPiece = e.target.parentElement.id; //QUE ISSO????
                     }
 
                     if (ws.moveStarted && e.target.className.includes('board-spot-black')) {
