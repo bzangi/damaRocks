@@ -17,7 +17,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ComunicationManager {
 
-	
+	/*
+	 * Envia uma mensagem para todas as sessões conectadas no websocket
+	 * */
 	public static void sendToAll(Map<WebSocketSession, WebSocketHandler> map, String message) {
 		map.entrySet().stream().forEach(player -> {
 			try {
@@ -28,6 +30,9 @@ public class ComunicationManager {
 		});
 	}
 	
+	/*
+	 * Envia o nome inserido em uma sessão para a outra sessão conectada no websocket
+	 * */	
 	public static void sendAllNamesToAllSessions(Map<WebSocketSession, WebSocketHandler> map) throws JsonProcessingException{
 		Map<String, String> playersMap = new LinkedHashMap<>();
 		map.entrySet().stream().forEach(player -> {
@@ -38,10 +43,4 @@ public class ComunicationManager {
 		sendToAll(map, serialized);
 	}
 	
-//	public static void sendTableToAllSessions(Map<WebSocketSession, WebSocketHandler> map) {
-//		Map<String, String> movesMap = new LinkedHashMap<>();
-//		map.entrySet().stream().forEach(move -> {
-//			movesMap.put(move.getKey().getAttributes().get("move").toString(), );
-//		});
-//	}
 }

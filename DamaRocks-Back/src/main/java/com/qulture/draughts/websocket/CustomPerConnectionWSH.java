@@ -97,16 +97,21 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 			String serialized = new ObjectMapper().writeValueAsString(serialMap);
 			
 			ComunicationManager.sendToAll(this.handlers, serialized);
-			
+		
 		} else {
 			session.sendMessage(new TextMessage("{\r\n"
 					+ "  \"code\": \"0\",\r\n"
 					+ "  \"message\": \"Partida em andamento\"\r\n"
 					+ "}"));
 		}
+		
+		
 
 	}
 	
+	/*
+	 * Trata  ou delega o tratamento de mensagens recebidas do front-end
+	 * */
 	@Override
 	public void handleMessage(WebSocketSession session, WebSocketMessage<?> message) throws Exception {
 		if(!session.getAttributes().containsKey("ign")) {
@@ -125,6 +130,18 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 										new Spot(splittedNewSpot[0], splittedNewSpot[1]));
 			Turn nextTurn = gameManager.getTurn();
 			
+			if(GameManager.getPlayer1PiecesCounter()==0) {
+				session.sendMessage(new TextMessage("{\r\n"
+						+ "  \"code\": \"7\",\r\n"
+						+ "  \"message\": \"Player 2 venceu\"\r\n"
+						+ "}"));
+			} else if (GameManager.getPlayer2PiecesCounter()==0) {
+				session.sendMessage(new TextMessage("{\r\n"
+						+ "  \"code\": \"7\",\r\n"
+						+ "  \"message\": \"Player 1 venceu\"\r\n"
+						+ "}"));
+			}
+			
 			Map<String, Object> serialMap = new LinkedHashMap<>();
 			serialMap.put("table", newTable);
 			serialMap.put("turn", nextTurn);
@@ -136,7 +153,6 @@ public class CustomPerConnectionWSH implements WebSocketHandler, BeanFactoryAwar
 		}
 		
 		
-		//MOVE@4,7/pj1@5,8pj0
 	
 		getHandler(session).handleMessage(session, message);
 	}

@@ -8,7 +8,7 @@ public class DraughtsApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DraughtsApplication.class, args);
-		System.out.println("SERVIDOR TA ONLINE");
+		System.out.println("SERVIDOR ONLINE");
 	}
 
 }

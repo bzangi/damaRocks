@@ -67,8 +67,6 @@ function startGame() {
             //Recebe a tabela e o turno serializados {table, turn, code}
         } else if (responseObject.code == '6') {
 
-            console.log(responseObject)
-
             let pieces = [...document.querySelectorAll('div[class^="piece"]')];
 
 
@@ -132,8 +130,6 @@ function startGame() {
                     return false
                 }
 
-                console.log(responseObject.turn.player)
-                console.log(localStorage.getItem('player'))
 
                 if (responseObject.turn.player == localStorage.getItem('player')) { //AQUI PODE
                     //Removendo classe do elemento selecionado
@@ -163,17 +159,19 @@ function startGame() {
                         ws.send('MOVE@' + ws.clickedPiece + '/' + ws.clickedPieceState + '@' + e.target.id + '/pj0');
                         ws.clickedPiece = '';
                         ws.clickedPieceState = '';
-                        e.target.classList.remove('selected-spot')
+                        e.target.classList.remove('selected-spot');
                     }
                 }
             }
 
             allClickableElements.forEach(element => {
-                element.addEventListener('click', this.moveFunction)
+                element.addEventListener('click', this.moveFunction);
             });
 
             gameStarted = true;
 
+        } else if (responseObject.code == '7') {
+            alert(responseObject.message);
         }
     }
 
