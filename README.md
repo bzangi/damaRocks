@@ -3,6 +3,8 @@
 
 Jogo de damas tradicional em tabuleiro 10x10 com 20 peças para cada jogador.
 
+Disponível online em: https://dama-rocks-game.herokuapp.com/
+
 =======================
 ### Pré-requisitos
 Necessário ter instalado em sua máquina Java Development Kit 8 ou superior e uma IDE que suporte o Java (recomendo Eclipse ou IntelliJ)
