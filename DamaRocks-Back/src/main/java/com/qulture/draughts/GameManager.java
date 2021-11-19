@@ -24,13 +24,14 @@ public class GameManager {
 	 * método responsável por montar o tabuleiro inicial com as peças em seus
 	 * devidos lugares.
 	 */
+	//SDFNBIFSDAGHIUSDFA
 
 	public Table getInitialTable() {
 		for (int i = 1; i <= 10; i++) {
 			for (int j = 1; j <= 10; j++) {
-				if (i <= 4) { 
+				if (i <= 4) {
 					if ((i % 2 != 0 && j % 2 == 0) || (i % 2 == 0 && j % 2 != 0)) {
-						table.getSpots().add(new Spot(i + "," + j, "pj1")); 
+						table.getSpots().add(new Spot(i + "," + j, "pj1"));
 					}
 				} else if (i >= 7) {
 					if (i % 2 == 0 && j % 2 != 0 || i % 2 != 0 && j % 2 == 0)
@@ -46,8 +47,6 @@ public class GameManager {
 		return table;
 	}
 
-
-
 	/*
 	 * Gera nova tabela baseado no movimento do jogador apenas quando o movimento
 	 * for válido
@@ -62,14 +61,13 @@ public class GameManager {
 		int newColumn = Integer.parseInt(newSplitted[1]);
 		int oldColumn = Integer.parseInt(oldSplitted[1]);
 
-
 		if (oldSpot.getState().equals("qpj1")) {
-			this.queenMovimentationRules(oldSpot, newSpot, "qpj1", "pj2");;
-			
+			this.queenMovimentationRules(oldSpot, newSpot, "qpj1", "pj2");
+			;
+
 		} else if (oldSpot.getState().equals("qpj2")) {
 			this.queenMovimentationRules(oldSpot, newSpot, "qpj2", "pj1");
-			
-			
+
 			/*
 			 * movimento simples jogador 1
 			 */
@@ -136,38 +134,39 @@ public class GameManager {
 		return table;
 	}
 
-
 	/*
 	 * Remove a peça da casa antiga e posiciona na nova, passando o turno para o
-	 * oponente. Caso a peça alcance o outro lado do tabuleiro, ela irá se tornar Dama
+	 * oponente. Caso a peça alcance o outro lado do tabuleiro, ela irá se tornar
+	 * Dama
 	 */
 	private void simpleMove(Table table, Spot oldSpot, Spot newSpot, String state, String turn) {
 		int length = table.getSpots().size();
-		
+
 		/*
 		 * Iteração para encontrar o antigo spot na ArrayList e alterar seu estado
 		 */
-		
-		
+
 		for (int i = 0; i < length; i++) {
 			Spot spot = table.getSpots().get(i);
 			if (spot.getLocation().equals(oldSpot.getLocation())) {
 				spot.setState("pj0");
 			}
-			if (spot.getLocation().equals(newSpot.getLocation()) && newSpot.getLocation().split(",")[0].equals("10")){ 
+			if (spot.getLocation().equals(newSpot.getLocation()) && newSpot.getLocation().split(",")[0].equals("10")) {
 				spot.setState("qpj1");
-				
-			} else if(spot.getLocation().equals(newSpot.getLocation()) && newSpot.getLocation().split(",")[0].equals("1")) {
+
+			} else if (spot.getLocation().equals(newSpot.getLocation())
+					&& newSpot.getLocation().split(",")[0].equals("1")) {
 				spot.setState("qpj2");
-				
-			}else if(spot.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("1") || 
-					spot.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("10")) {
+
+			} else if (spot.getLocation().equals(newSpot.getLocation())
+					&& !newSpot.getLocation().split(",")[0].equals("1")
+					|| spot.getLocation().equals(newSpot.getLocation())
+							&& !newSpot.getLocation().split(",")[0].equals("10")) {
 				spot.setState(state);
 			}
 		}
 		this.turn.setPlayer(turn);
 	}
-	
 
 	/*
 	 * Remove a peça da casa antiga e posiciona na nova, removendo a peça inimiga e
@@ -191,10 +190,13 @@ public class GameManager {
 							if (spot2.getLocation().equals(oldSpot.getLocation())) {
 								spot2.setState("pj0");
 							}
-							if (spot2.getLocation().equals(newSpot.getLocation()) && newSpot.getLocation().split(",")[0].equals("10")){ //SE NOVO SPOT FOR LINHA 10 OU 1 SETAR DAMA
+							if (spot2.getLocation().equals(newSpot.getLocation())
+									&& newSpot.getLocation().split(",")[0].equals("10")) { // SE NOVO SPOT FOR LINHA 10
+																							// OU 1 SETAR DAMA
 								spot2.setState("qpj1");
-								
-							}else if(spot2.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("10")) {
+
+							} else if (spot2.getLocation().equals(newSpot.getLocation())
+									&& !newSpot.getLocation().split(",")[0].equals("10")) {
 								spot2.setState(state);
 							}
 
@@ -221,15 +223,18 @@ public class GameManager {
 							if (spot2.getLocation().equals(oldSpot.getLocation())) {
 								spot2.setState("pj0");
 							}
-							if (spot2.getLocation().equals(newSpot.getLocation()) && newSpot.getLocation().split(",")[0].equals("1")){ //SE NOVO SPOT FOR LINHA 10 OU 1 SETAR DAMA
+							if (spot2.getLocation().equals(newSpot.getLocation())
+									&& newSpot.getLocation().split(",")[0].equals("1")) { // SE NOVO SPOT FOR LINHA 10
+																							// OU 1 SETAR DAMA
 								spot2.setState("qpj2");
-								
-							}else if(spot2.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("1")) {
+
+							} else if (spot2.getLocation().equals(newSpot.getLocation())
+									&& !newSpot.getLocation().split(",")[0].equals("1")) {
 								spot2.setState(state);
 							}
 
 						}
-						
+
 					} else {
 						System.out.println("MOVIMENTO INVÁLIDO J2 - 2 casas sem oponente");
 					}
@@ -238,10 +243,11 @@ public class GameManager {
 			}
 		}
 	}
+
 	/*
-	 * Regras de movimentação da dama, impede ela de pular por mais de 1 peça inimiga, 
-	 * obriga a dama a ficar 1 casa depois da peça que ela "comeu"
-	 * */
+	 * Regras de movimentação da dama, impede ela de pular por mais de 1 peça
+	 * inimiga, obriga a dama a ficar 1 casa depois da peça que ela "comeu"
+	 */
 	public void queenMovimentationRules(Spot oldSpot, Spot newSpot, String thisState, String enemyState) {
 		String[] oldSplitted = oldSpot.getLocation().split(",");
 		String[] newSplitted = newSpot.getLocation().split(",");
@@ -253,14 +259,22 @@ public class GameManager {
 
 		int deltaLine = newLine - oldLine;
 		int deltaColumn = newColumn - oldColumn;
-		
+
+		String allyState = "";
+
+		if (enemyState.contains("j1")) {
+			allyState = "pj2";
+		} else {
+			allyState = "pj1";
+		}
+
 		String nextTurn;
-		if(thisState == "qpj1") {
+		if (thisState == "qpj1") {
 			nextTurn = "j2";
 		} else {
 			nextTurn = "j1";
 		}
-		
+
 		if (deltaLine == deltaColumn || deltaLine == -(deltaColumn)) {
 			
 			// direita embaixo
@@ -270,37 +284,50 @@ public class GameManager {
 					String nextLocation = (i + 1) + "," + (j + 1);
 					Spot spotFinder = this.spotsIterator(table.getSpots(), location);
 					Spot nextSpotFinder = this.spotsIterator(table.getSpots(), nextLocation);
-					if (spotFinder.getState().equals("pj0") && location.equals(newSpot.getLocation())) {
+					
+					//verifica se existe peça aliada no caminho
+					 if (!spotFinder.getLocation().equals(newSpot.getLocation()) && (nextSpotFinder.getState().equals(allyState)
+							|| nextSpotFinder.getState().equals("q" + allyState))) {
+						System.out.println("MOVIMENTO INVÁLIDO 1");
+						break;
+					}else if (spotFinder.getState().equals("pj0") && location.equals(newSpot.getLocation())) {
 						// ANDAR
 						this.queenMove(table, oldSpot, newSpot, thisState, nextTurn);
-					} else if (spotFinder.getState().equals(enemyState) || spotFinder.getState().equals("q" + enemyState)) {
+					} else if (spotFinder.getState().equals(enemyState)
+							|| spotFinder.getState().equals("q" + enemyState)) {
 						// COMER
-						if(nextSpotFinder.getState().equals("pj0")) {
+						if (nextSpotFinder.getState().equals("pj0")) {
 							this.jumpMove(spotFinder, oldSpot, nextSpotFinder, thisState);
-						    break;
-						}else{
+							break;
+						} else {
 							System.out.println("MOVIMENTO INVÁLIDO");
 							break;
 						}
-					}
+					} 
 				}
-				
+
 				// esquerda embaixo
 			} else if (deltaLine > 0 && deltaColumn < 0) {
-				for (int i = oldLine, j = oldColumn ; i <= newLine && j >= newColumn; i++, j--) {
+				for (int i = oldLine, j = oldColumn; i <= newLine && j >= newColumn; i++, j--) {
 					String location = i + "," + j;
 					String nextLocation = (i + 1) + "," + (j - 1);
 					Spot spotFinder = this.spotsIterator(table.getSpots(), location);
 					Spot nextSpotFinder = this.spotsIterator(table.getSpots(), nextLocation);
-					if (spotFinder.getState().equals("pj0") && location.equals(newSpot.getLocation())) {
+					
+					if (!spotFinder.getLocation().equals(newSpot.getLocation()) && (nextSpotFinder.getState().equals(allyState)
+							|| nextSpotFinder.getState().equals("q" + allyState))) {
+						System.out.println("MOVIMENTO INVÁLIDO");
+						break;
+					}else if (spotFinder.getState().equals("pj0") && location.equals(newSpot.getLocation())) {
 						// ANDAR
 						this.queenMove(table, oldSpot, newSpot, thisState, nextTurn);
-					} else if (spotFinder.getState().equals(enemyState) || spotFinder.getState().equals("q" + enemyState)) {
+					} else if (spotFinder.getState().equals(enemyState)
+							|| spotFinder.getState().equals("q" + enemyState)) {
 						// COMER
-						if(nextSpotFinder.getState().equals("pj0")) {
+						if (nextSpotFinder.getState().equals("pj0")) {
 							this.jumpMove(spotFinder, oldSpot, nextSpotFinder, thisState);
 							break;
-						}else{
+						} else {
 							break;
 						}
 					}
@@ -312,18 +339,24 @@ public class GameManager {
 					String nextLocation = (i - 1) + "," + (j + 1);
 					Spot spotFinder = this.spotsIterator(table.getSpots(), location);
 					Spot nextSpotFinder = this.spotsIterator(table.getSpots(), nextLocation);
-					if (spotFinder.getState().equals("pj0") && location.equals(newSpot.getLocation())) {
+					
+					if (!spotFinder.getLocation().equals(newSpot.getLocation()) && (nextSpotFinder.getState().equals(allyState)
+							|| nextSpotFinder.getState().equals("q" + allyState))) {
+						System.out.println("MOVIMENTO INVÁLIDO");
+						break;
+					}else if (spotFinder.getState().equals("pj0") && location.equals(newSpot.getLocation())) {
 						// ANDAR
 						this.queenMove(table, oldSpot, newSpot, thisState, nextTurn);
-					} else if (spotFinder.getState().equals(enemyState) || spotFinder.getState().equals("q" + enemyState)) {
+					} else if (spotFinder.getState().equals(enemyState)
+							|| spotFinder.getState().equals("q" + enemyState)) {
 						// COMER
-						if(nextSpotFinder.getState().equals("pj0")) {
+						if (nextSpotFinder.getState().equals("pj0")) {
 							this.jumpMove(spotFinder, oldSpot, nextSpotFinder, thisState);
 							break;
-						}else{
+						} else {
 							break;
 						}
-					}
+					} 
 				}
 			} else {
 				for (int i = oldLine, j = oldColumn; i >= newLine && j >= newColumn; i--, j--) {
@@ -331,48 +364,54 @@ public class GameManager {
 					String nextLocation = (i - 1) + "," + (j - 1);
 					Spot spotFinder = this.spotsIterator(table.getSpots(), location);
 					Spot nextSpotFinder = this.spotsIterator(table.getSpots(), nextLocation);
-					if (spotFinder.getState().equals("pj0") && location.equals(newSpot.getLocation())) {
+					
+					if (!spotFinder.getLocation().equals(newSpot.getLocation()) && (nextSpotFinder.getState().equals(allyState)
+							|| nextSpotFinder.getState().equals("q" + allyState))) {
+						System.out.println("MOVIMENTO INVÁLIDO");
+						break;
+					}else if (spotFinder.getState().equals("pj0") && location.equals(newSpot.getLocation())) {
 						// ANDAR
 						this.queenMove(table, oldSpot, newSpot, thisState, nextTurn);
-					} else if (spotFinder.getState().equals(enemyState) || spotFinder.getState().equals("q" + enemyState)) {
+					} else if (spotFinder.getState().equals(enemyState)
+							|| spotFinder.getState().equals("q" + enemyState)) {
 						// COMER
-						if(nextSpotFinder.getState().equals("pj0")) {
+						if (nextSpotFinder.getState().equals("pj0")) {
 							this.jumpMove(spotFinder, oldSpot, nextSpotFinder, thisState);
 							break;
-						}else{
+						} else {
 							break;
 						}
-					}
+					} 
 				}
 			}
 
 		} else {
 			System.out.println("MOVIMENTO INVÁLIDO - dama fora da diagonal");
 		}
-		
+
 	}
-	
-	
+
 	/*
 	 * Move a dama livremente pelas diagonais vazias
-	 * */
+	 */
 	private void queenMove(Table table, Spot oldSpot, Spot newSpot, String state, String turn) {
 		int length = table.getSpots().size();
-		
+
 		for (int i = 0; i < length; i++) {
 			Spot spot = table.getSpots().get(i);
 			if (spot.getLocation().equals(oldSpot.getLocation())) {
 				spot.setState("pj0");
 			}
-				
-			if(spot.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("1") || 
-					spot.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("10")) {
+
+			if (spot.getLocation().equals(newSpot.getLocation()) && !newSpot.getLocation().split(",")[0].equals("1")
+					|| spot.getLocation().equals(newSpot.getLocation())
+							&& !newSpot.getLocation().split(",")[0].equals("10")) {
 				spot.setState(state);
 			}
 		}
 		this.turn.setPlayer(turn);
 	}
-	
+
 	private Spot spotsIterator(ArrayList<Spot> Spots, String location) {
 		for (Spot spot : Spots) {
 			if (spot.getLocation().equals(location)) {
@@ -389,7 +428,7 @@ public class GameManager {
 		GameManager.player2PiecesCounter = 20;
 
 	}
-	
+
 	public Turn getTurn() {
 		return turn;
 	}
